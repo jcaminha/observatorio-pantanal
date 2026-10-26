@@ -129,8 +129,15 @@ export const StationDetailModal: React.FC<StationDetailModalProps> = ({
                   <img
                     src={data.photoUrl}
                     alt={data.commonName}
+                    loading="lazy"
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.src.includes('public/')) {
+                        target.src = data.photoUrl.startsWith('/') ? data.photoUrl : `/${data.photoUrl}`;
+                      }
+                    }}
                   />
                 </div>
               )}

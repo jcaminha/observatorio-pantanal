@@ -88,8 +88,16 @@ export const BiodiversityTab: React.FC<BiodiversityTabProps> = ({
                   <img
                     src={sp.photoUrl}
                     alt={sp.commonName}
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      // Fallback if path ever has a leading dot or relative resolution issue
+                      const target = e.currentTarget;
+                      if (!target.src.includes('public/')) {
+                        target.src = sp.photoUrl.startsWith('/') ? sp.photoUrl : `/${sp.photoUrl}`;
+                      }
+                    }}
                   />
                   <div className="absolute top-1.5 right-1.5">
                     <span
