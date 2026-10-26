@@ -1,0 +1,7 @@
+{
+  "name": "INPP - Observatório de Dados Públicos do Pantanal",
+  "description": "Observatório de dados públicos do Pantanal pelo Instituto Nacional de Pesquisa do Pantanal (INPP/MCTI): monitoramento em tempo real de queimadas, chuvas, rios, desmatamento, séries históricas, economia e biodiversidade.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
