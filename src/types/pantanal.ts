@@ -136,6 +136,10 @@ export interface EconomicIndicator {
   trend: string;
   detail: string;
   source: string;
+  nationalValue: string;
+  nationalPercent: number; // Percentage of national total e.g. 1.8 for 1.8%
+  nationalContext: string; // Explanatory context of the Brazilian total benchmark
+  nationalBenchmarkLabel?: string;
 }
 
 export type ActiveTab = 'situacao' | 'series' | 'economia' | 'biodiversidade' | 'cobertura';

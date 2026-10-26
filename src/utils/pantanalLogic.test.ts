@@ -7,6 +7,7 @@ import {
   calculatePearsonCorrelation,
   formatRiverLevel,
   formatHectares,
+  formatPercentage,
 } from './pantanalLogic.ts';
 import { FireSpot } from '../types/pantanal.ts';
 
@@ -139,4 +140,6 @@ test('formatRiverLevel and formatHectares format values nicely', () => {
   assert.equal(formatRiverLevel(-35), '-0.35 m (-35 cm)');
   assert.equal(formatHectares(1500000), '1,5M ha');
   assert.equal(formatHectares(450), '450 ha');
+  assert.equal(formatPercentage(1.8, 1), '1,8%');
+  assert.equal(formatPercentage(42.0, 1), '42,0%');
 });

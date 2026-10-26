@@ -571,119 +571,192 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
         {/* Leaflet container */}
         <div ref={mapContainerRef} className="w-full h-full z-0" />
 
-        {/* Left Floating Filters Panel */}
-        <div
-          className={`absolute top-4 left-4 z-10 w-72 max-w-[calc(100vw-32px)] max-h-[calc(100vh-130px)] overflow-y-auto p-3.5 rounded-xl border-2 shadow-xl backdrop-blur-md transition-all ${
-            isDarkMode
-              ? 'bg-[#0b1329]/95 border-blue-900 text-slate-100'
-              : 'bg-white/95 border-slate-300 text-slate-900'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2.5 pb-2 border-b-2 border-slate-200 dark:border-blue-900">
-            <div className={`flex items-center gap-1.5 font-black text-xs uppercase tracking-wider ${
-              isDarkMode ? 'text-blue-300' : 'text-[#0a1c46]'
-            }`}>
-              <Filter className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Filtros Georreferenciados</span>
+        {/* Left Floating Stack: Filters & Official Legend */}
+        <div className="absolute top-4 left-4 z-10 w-72 max-w-[calc(100vw-32px)] max-h-[calc(100vh-140px)] flex flex-col gap-2.5 overflow-y-auto pr-0.5">
+          {/* Box 1: Filtros Georreferenciados */}
+          <div
+            className={`p-3.5 rounded-xl border-2 shadow-xl backdrop-blur-md transition-all shrink-0 ${
+              isDarkMode
+                ? 'bg-[#0b1329]/95 border-blue-900 text-slate-100'
+                : 'bg-white/95 border-slate-300 text-slate-900'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2 pb-1.5 border-b-2 border-slate-200 dark:border-blue-900">
+              <div className={`flex items-center gap-1.5 font-black text-xs uppercase tracking-wider ${
+                isDarkMode ? 'text-blue-300' : 'text-[#0a1c46]'
+              }`}>
+                <Filter className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Filtros Georreferenciados</span>
+              </div>
+              <span className={`text-[10px] font-black px-2 py-0.5 rounded ${
+                isDarkMode ? 'bg-blue-950 text-blue-300' : 'bg-blue-100 text-[#15347a]'
+              }`}>
+                Tempo Real
+              </span>
             </div>
-            <span className={`text-[10px] font-black px-2 py-0.5 rounded ${
-              isDarkMode ? 'bg-blue-950 text-blue-300' : 'bg-blue-100 text-[#15347a]'
-            }`}>
-              Tempo Real
-            </span>
+
+            <div className="space-y-2.5 text-xs">
+              {/* State filter */}
+              <div>
+                <label htmlFor="select-state" className="block text-slate-900 dark:text-slate-100 text-xs mb-1 font-bold">
+                  Estado do Bioma:
+                </label>
+                <select
+                  id="select-state"
+                  value={selectedState}
+                  onChange={(e) => setSelectedState(e.target.value as StateCode)}
+                  className={`w-full p-1.5 rounded-lg border-2 text-xs font-bold outline-none transition-colors ${
+                    isDarkMode
+                      ? 'bg-[#101b38] border-blue-900 text-slate-100 focus:border-blue-500'
+                      : 'bg-white border-slate-300 text-slate-900 focus:border-[#15347a]'
+                  }`}
+                >
+                  <option value="TODOS">Todos os Estados (MS & MT)</option>
+                  <option value="MS">Mato Grosso do Sul (Pantanal Sul)</option>
+                  <option value="MT">Mato Grosso (Pantanal Norte)</option>
+                </select>
+              </div>
+
+              {/* Sub-region filter */}
+              <div>
+                <label htmlFor="select-subregion" className="block text-slate-700 dark:text-slate-300 text-[11px] mb-1 font-bold">
+                  Sub-região do Pantanal:
+                </label>
+                <select
+                  id="select-subregion"
+                  value={selectedSubRegion}
+                  onChange={(e) => setSelectedSubRegion(e.target.value as SubRegion)}
+                  className={`w-full p-1.5 rounded-lg border-2 text-xs font-bold outline-none transition-colors ${
+                    isDarkMode
+                      ? 'bg-[#101b38] border-blue-900 text-slate-200 focus:border-blue-500'
+                      : 'bg-white border-slate-300 text-slate-800 focus:border-[#15347a]'
+                  }`}
+                >
+                  <option value="Todas">Todas as Sub-regiões</option>
+                  <option value="Nhecolândia">Nhecolândia</option>
+                  <option value="Poconé">Poconé / Transpantaneira</option>
+                  <option value="Barão de Melgaço">Barão de Melgaço</option>
+                  <option value="Cáceres">Cáceres</option>
+                  <option value="Paiaguás">Paiaguás</option>
+                  <option value="Miranda">Miranda</option>
+                  <option value="Abobral">Abobral</option>
+                  <option value="Porto Murtinho">Porto Murtinho</option>
+                  <option value="Aquidauana">Aquidauana</option>
+                </select>
+              </div>
+
+              {/* Fire risk filter */}
+              <div>
+                <label htmlFor="select-fire-risk" className="block text-slate-700 dark:text-slate-300 text-[11px] mb-1 font-bold">
+                  Severidade do Fogo:
+                </label>
+                <select
+                  id="select-fire-risk"
+                  value={selectedRisk}
+                  onChange={(e) => setSelectedRisk(e.target.value)}
+                  className={`w-full p-1.5 rounded-lg border-2 text-xs font-bold outline-none transition-colors ${
+                    isDarkMode
+                      ? 'bg-[#101b38] border-blue-900 text-slate-200 focus:border-blue-500'
+                      : 'bg-white border-slate-300 text-slate-800 focus:border-[#15347a]'
+                  }`}
+                >
+                  <option value="TODOS">Todos os Riscos</option>
+                  <option value="Crítico">Apenas Crítico (Emergencial)</option>
+                  <option value="Alto">Alto e Superior</option>
+                  <option value="Médio">Médio</option>
+                  <option value="Baixo">Baixo</option>
+                </select>
+              </div>
+
+              {/* Min FRP slider */}
+              <div>
+                <div className="flex justify-between text-[11px] text-slate-700 dark:text-slate-300 mb-1 font-bold">
+                  <span>Potência Mínima (FRP):</span>
+                  <span className={`font-black font-mono ${
+                    isDarkMode ? 'text-blue-300' : 'text-[#15347a]'
+                  }`}>{minFrp} MW</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value={minFrp}
+                  onChange={(e) => setMinFrp(Number(e.target.value))}
+                  aria-label="Filtro de potência mínima do fogo em MW"
+                  className="w-full accent-[#15347a] cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg"
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-3 text-xs">
-            {/* State filter */}
-            <div>
-              <label htmlFor="select-state" className="block text-slate-900 dark:text-slate-100 text-xs mb-1 font-bold">
-                Estado do Bioma:
-              </label>
-              <select
-                id="select-state"
-                value={selectedState}
-                onChange={(e) => setSelectedState(e.target.value as StateCode)}
-                className={`w-full p-2 rounded-lg border-2 text-xs font-bold outline-none transition-colors ${
-                  isDarkMode
-                    ? 'bg-[#101b38] border-blue-900 text-slate-100 focus:border-blue-500'
-                    : 'bg-white border-slate-300 text-slate-900 focus:border-[#15347a]'
-                }`}
-              >
-                <option value="TODOS">Todos os Estados (MS & MT)</option>
-                <option value="MS">Mato Grosso do Sul (Pantanal Sul)</option>
-                <option value="MT">Mato Grosso (Pantanal Norte)</option>
-              </select>
-            </div>
-
-            {/* Sub-region filter */}
-            <div>
-              <label htmlFor="select-subregion" className="block text-slate-500 dark:text-slate-400 text-[11px] mb-1 font-medium">
-                Sub-região do Pantanal:
-              </label>
-              <select
-                id="select-subregion"
-                value={selectedSubRegion}
-                onChange={(e) => setSelectedSubRegion(e.target.value as SubRegion)}
-                className={`w-full p-1.5 rounded-lg border text-xs outline-none transition-colors ${
-                  isDarkMode
-                    ? 'bg-[#101b38] border-blue-900 text-slate-200 focus:border-blue-500'
-                    : 'bg-white border-blue-200 text-slate-800 focus:border-[#244b9b]'
-                }`}
-              >
-                <option value="Todas">Todas as Sub-regiões</option>
-                <option value="Nhecolândia">Nhecolândia</option>
-                <option value="Poconé">Poconé / Transpantaneira</option>
-                <option value="Barão de Melgaço">Barão de Melgaço</option>
-                <option value="Cáceres">Cáceres</option>
-                <option value="Paiaguás">Paiaguás</option>
-                <option value="Miranda">Miranda</option>
-                <option value="Abobral">Abobral</option>
-                <option value="Porto Murtinho">Porto Murtinho</option>
-                <option value="Aquidauana">Aquidauana</option>
-              </select>
-            </div>
-
-            {/* Fire risk filter */}
-            <div>
-              <label htmlFor="select-fire-risk" className="block text-slate-500 dark:text-slate-400 text-[11px] mb-1 font-medium">
-                Severidade do Fogo:
-              </label>
-              <select
-                id="select-fire-risk"
-                value={selectedRisk}
-                onChange={(e) => setSelectedRisk(e.target.value)}
-                className={`w-full p-1.5 rounded-lg border text-xs outline-none transition-colors ${
-                  isDarkMode
-                    ? 'bg-[#101b38] border-blue-900 text-slate-200 focus:border-blue-500'
-                    : 'bg-white border-blue-200 text-slate-800 focus:border-[#244b9b]'
-                }`}
-              >
-                <option value="TODOS">Todos os Riscos</option>
-                <option value="Crítico">Apenas Crítico (Emergencial)</option>
-                <option value="Alto">Alto e Superior</option>
-                <option value="Médio">Médio</option>
-                <option value="Baixo">Baixo</option>
-              </select>
-            </div>
-
-            {/* Min FRP slider */}
-            <div>
-              <div className="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-1">
-                <span>Potência Mínima (FRP):</span>
-                <span className={`font-bold font-mono ${
-                  isDarkMode ? 'text-blue-300' : 'text-[#244b9b]'
-                }`}>{minFrp} MW</span>
+          {/* Box 2: Legenda Oficial (Abaixo dos Filtros Georreferenciados) */}
+          <div
+            className={`p-3 rounded-xl border-2 shadow-xl backdrop-blur-md transition-all shrink-0 ${
+              isDarkMode
+                ? 'bg-[#0b1329]/95 border-blue-900 text-slate-100'
+                : 'bg-white/95 border-slate-300 text-slate-900'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2 pb-1.5 border-b-2 border-slate-200 dark:border-blue-900">
+              <div className={`flex items-center gap-1.5 font-black text-xs uppercase tracking-wider ${
+                isDarkMode ? 'text-blue-300' : 'text-[#0a1c46]'
+              }`}>
+                <Info className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Legenda Oficial</span>
               </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                step="5"
-                value={minFrp}
-                onChange={(e) => setMinFrp(Number(e.target.value))}
-                aria-label="Filtro de potência mínima do fogo em MW"
-                className="w-full accent-[#244b9b] cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg"
-              />
+              <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                isDarkMode ? 'bg-blue-950 text-blue-300' : 'bg-blue-50 text-[#15347a] border border-blue-200'
+              }`}>
+                Convenções
+              </span>
+            </div>
+
+            <div className="space-y-1.5 text-xs">
+              <div className="flex items-center justify-between gap-1.5" title="Fonte: IBGE 1:250.000 (MMA 2026)">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-4 h-2.5 border-2 border-dashed border-amber-500 bg-amber-500/30 inline-block rounded-xs shrink-0"></span>
+                  <span className="text-amber-800 dark:text-amber-300 font-black text-[11px]">Perímetro Pantanal</span>
+                </div>
+                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">IBGE</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-1.5" title="Fonte: INPE BDQueimadas (24/10/2026)">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-full bg-red-600 inline-block animate-pulse shrink-0"></span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">Queimada Crítica</span>
+                </div>
+                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">INPE</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-1.5" title="Fonte: Agência Nacional de Águas - ANA (24/10/2026)">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded bg-[#15347a] inline-block shrink-0"></span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">Régua Fluviométrica</span>
+                </div>
+                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">ANA</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-1.5" title="Fonte: INPE DETER Pantanal (Out/2026)">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rotate-45 bg-red-600 inline-block shrink-0"></span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">Alerta DETER</span>
+                </div>
+                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">DETER</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-1.5" title="Fonte: ICMBio / IHP (2026)">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3.5 h-2.5 bg-blue-500/40 border-2 border-blue-600 inline-block shrink-0"></span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">Corredor Ecológico</span>
+                </div>
+                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">ICMBio</span>
+              </div>
+            </div>
+
+            <div className="text-[10px] text-slate-700 dark:text-slate-300 pt-1.5 mt-1.5 border-t border-slate-200 dark:border-blue-900 flex items-center justify-between gap-2 font-semibold">
+              <span>Dados oficiais com data/hora</span>
+              <span className="text-[#15347a] dark:text-blue-300 font-black whitespace-nowrap">INPP · MCTI</span>
             </div>
           </div>
         </div>
@@ -854,43 +927,6 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
                 Fonte: <span className="font-medium text-slate-700 dark:text-slate-300">ICMBio & IUCN Red List</span> · 2026
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Bottom Legend with Official Provenance */}
-        <div
-          className={`absolute bottom-6 left-4 z-10 px-4 py-3 rounded-xl border-2 shadow-xl backdrop-blur-md hidden sm:flex flex-col gap-2 text-xs ${
-            isDarkMode
-              ? 'bg-[#0b1329]/95 border-blue-900 text-slate-100'
-              : 'bg-white/95 border-slate-300 text-slate-900'
-          }`}
-        >
-          <div className="flex items-center gap-4 flex-wrap">
-            <span className="font-black text-slate-800 dark:text-slate-200 uppercase text-xs tracking-wider">Legenda Oficial:</span>
-            <div className="flex items-center gap-1.5" title="Fonte: IBGE 1:250.000 (MMA 2026)">
-              <span className="w-4 h-2.5 border-2 border-dashed border-amber-500 bg-amber-500/30 inline-block"></span>
-              <span className="text-amber-800 dark:text-amber-300 font-extrabold">Perímetro do Pantanal (IBGE)</span>
-            </div>
-            <div className="flex items-center gap-1.5" title="Fonte: INPE BDQueimadas (24/10/2026)">
-              <span className="w-3 h-3 rounded-full bg-red-600 inline-block animate-pulse"></span>
-              <span className="font-bold text-slate-900 dark:text-slate-100">Queimada Crítica</span>
-            </div>
-            <div className="flex items-center gap-1.5" title="Fonte: Agência Nacional de Águas - ANA (24/10/2026)">
-              <span className="w-3 h-3 rounded bg-[#15347a] inline-block"></span>
-              <span className="font-bold text-slate-900 dark:text-slate-100">Régua Fluviométrica</span>
-            </div>
-            <div className="flex items-center gap-1.5" title="Fonte: INPE DETER Pantanal (Out/2026)">
-              <span className="w-3 h-3 rotate-45 bg-red-600 inline-block"></span>
-              <span className="font-bold text-slate-900 dark:text-slate-100">Alerta DETER</span>
-            </div>
-            <div className="flex items-center gap-1.5" title="Fonte: ICMBio / IHP (2026)">
-              <span className="w-3.5 h-2.5 bg-blue-500/40 border-2 border-blue-600 inline-block"></span>
-              <span className="font-bold text-slate-900 dark:text-slate-100">Corredor Ecológico</span>
-            </div>
-          </div>
-          <div className="text-xs text-slate-700 dark:text-slate-300 pt-1.5 border-t border-slate-300 dark:border-blue-900 flex items-center justify-between gap-4 font-semibold">
-            <span>Todos os dados incluem atribuição oficial do órgão público emissor e data/hora da coleta.</span>
-            <span className="text-[#15347a] dark:text-blue-300 font-extrabold whitespace-nowrap">INPP · Unidade de Pesquisa do MCTI</span>
           </div>
         </div>
       </div>

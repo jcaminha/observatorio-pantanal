@@ -124,6 +124,16 @@ export const StationDetailModal: React.FC<StationDetailModalProps> = ({
 
           {type === 'species' && (
             <div className="space-y-3">
+              {data.photoUrl && (
+                <div className="w-full h-44 rounded-xl overflow-hidden border-2 border-slate-300 dark:border-slate-700">
+                  <img
+                    src={data.photoUrl}
+                    alt={data.commonName}
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              )}
               <div className="space-y-2 text-xs font-semibold text-slate-800 dark:text-slate-200">
                 <div>Nome Científico: <span className="italic font-bold text-slate-900 dark:text-slate-100">{data.scientificName}</span></div>
                 <div>Família: <span className="font-bold text-slate-900 dark:text-slate-100">{data.family}</span></div>

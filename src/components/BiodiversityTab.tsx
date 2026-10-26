@@ -71,54 +71,70 @@ export const BiodiversityTab: React.FC<BiodiversityTabProps> = ({
         </div>
       </div>
 
-      {/* Main Content: 6 Species Cards - High Contrast */}
-      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+      {/* Main Content: 6 Species Cards - High Contrast with Animal Photos */}
+      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {filteredSpecies.slice(0, 6).map((sp) => {
           return (
             <div
               key={sp.id}
               onClick={() => onSelectSpecies?.(sp)}
-              className={`p-4 rounded-xl border-2 flex flex-col justify-between transition-all cursor-pointer hover:shadow-lg ${
+              className={`p-3 sm:p-3.5 rounded-xl border-2 flex flex-col justify-between transition-all cursor-pointer group hover:shadow-lg ${
                 isDarkMode ? 'bg-[#0f172a] border-blue-900 hover:border-blue-600' : 'bg-white border-slate-300 hover:border-[#15347a] shadow-sm'
               }`}
             >
               <div>
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <div>
-                    <h3 className="font-black text-base text-[#0a1c46] dark:text-blue-100 leading-tight">
+                {/* Animal Photo with IUCN Badge */}
+                <div className="relative w-full h-24 sm:h-28 mb-2 rounded-lg overflow-hidden border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 shrink-0">
+                  <img
+                    src={sp.photoUrl}
+                    alt={sp.commonName}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-1.5 right-1.5">
+                    <span
+                      className={`text-[10px] font-black px-2 py-0.5 rounded shadow-sm ${
+                        sp.statusIUCN === 'Em Perigo'
+                          ? 'bg-red-600 text-white'
+                          : sp.statusIUCN === 'Vulnerável'
+                          ? 'bg-amber-600 text-white'
+                          : 'bg-emerald-700 text-white'
+                      }`}
+                    >
+                      {sp.statusIUCN}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-1.5 left-1.5">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-900/80 text-white backdrop-blur-xs">
+                      {sp.taxa}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start justify-between gap-1.5">
+                  <div className="min-w-0">
+                    <h3 className="font-black text-sm sm:text-base text-[#0a1c46] dark:text-blue-100 leading-tight truncate">
                       {sp.commonName}
                     </h3>
-                    <div className="text-xs italic font-bold text-slate-700 dark:text-slate-300 mt-0.5">
+                    <div className="text-[11px] italic font-bold text-slate-700 dark:text-slate-300 truncate">
                       {sp.scientificName} · {sp.family}
                     </div>
                   </div>
-
-                  <span
-                    className={`text-xs font-black px-2.5 py-1 rounded-md shrink-0 shadow-xs ${
-                      sp.statusIUCN === 'Em Perigo'
-                        ? 'bg-red-600 text-white'
-                        : sp.statusIUCN === 'Vulnerável'
-                        ? 'bg-amber-600 text-white'
-                        : 'bg-emerald-700 text-white'
-                    }`}
-                  >
-                    {sp.statusIUCN}
-                  </span>
                 </div>
 
-                <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 line-clamp-2 leading-snug my-2">
+                <p className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 line-clamp-2 leading-snug mt-1.5 mb-1">
                   {sp.description}
                 </p>
               </div>
 
-              <div className="space-y-1.5 text-xs pt-2 border-t border-slate-200 dark:border-slate-800">
+              <div className="space-y-1 text-[11px] pt-1.5 border-t border-slate-200 dark:border-slate-800">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-slate-700 dark:text-slate-300">População Estimada:</span>
-                  <span className="font-black text-slate-900 dark:text-slate-100">{sp.estimatedPopulation}</span>
+                  <span className="font-black text-slate-900 dark:text-slate-100 truncate ml-1">{sp.estimatedPopulation}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-slate-700 dark:text-slate-300">Habitat Primário:</span>
-                  <span className="font-black text-[#15347a] dark:text-blue-300">{sp.habitat}</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-300">Habitat:</span>
+                  <span className="font-black text-[#15347a] dark:text-blue-300 truncate ml-1">{sp.habitat}</span>
                 </div>
               </div>
             </div>

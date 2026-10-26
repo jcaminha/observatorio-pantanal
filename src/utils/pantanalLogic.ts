@@ -141,3 +141,10 @@ export function formatRiverLevel(cm: number): string {
   const m = cm / 100;
   return `${m >= 0 ? '+' : ''}${m.toFixed(2)} m (${cm} cm)`;
 }
+
+/**
+ * Formats a percentage value into Brazilian locale with symbol e.g. "1,8%"
+ */
+export function formatPercentage(val: number, decimals: number = 1): string {
+  return `${val.toLocaleString('pt-BR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}%`;
+}
