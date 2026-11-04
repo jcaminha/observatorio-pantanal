@@ -25,7 +25,7 @@ export const EconomyTab: React.FC<EconomyTabProps> = ({ isDarkMode }) => {
   );
 
   return (
-    <div className="h-full w-full flex flex-col justify-between p-2.5 sm:p-4 overflow-hidden">
+    <div className="min-h-full w-full flex flex-col justify-between p-2.5 sm:p-4 overflow-y-auto">
       {/* Top Banner & Sector Filter */}
       <div className="shrink-0 mb-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b-2 border-slate-300 dark:border-blue-900">

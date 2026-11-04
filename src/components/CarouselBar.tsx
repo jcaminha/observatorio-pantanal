@@ -89,7 +89,7 @@ export const CarouselBar: React.FC<CarouselBarProps> = ({
           <button
             onClick={onTogglePlay}
             aria-label={isPlaying ? 'Pausar carrossel' : 'Iniciar carrossel'}
-            title={isPlaying ? 'Pausar rotação de 20s (Barra de Espaço)' : 'Iniciar rotação (Barra de Espaço)'}
+            title={isPlaying ? 'Pausar rotação de 60s (Barra de Espaço)' : 'Iniciar rotação (Barra de Espaço)'}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black text-xs transition-all shadow-xs ${
               isPlaying
                 ? 'bg-[#15347a] text-white hover:bg-[#0a2560]'

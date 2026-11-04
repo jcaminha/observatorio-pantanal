@@ -131,7 +131,7 @@ export const TimeSeriesTab: React.FC<TimeSeriesTabProps> = ({ isDarkMode }) => {
   )},${height - padding.bottom} Z`;
 
   return (
-    <div className="h-full w-full flex flex-col justify-between p-3 sm:p-5 overflow-hidden">
+    <div className="min-h-full w-full flex flex-col justify-between p-3 sm:p-5 overflow-y-auto">
       {/* Top Banner & Metric Switcher */}
       <div className="shrink-0 mb-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-300 dark:border-blue-900">

@@ -33,7 +33,7 @@ export const FireHotspotsSlide: React.FC<FireHotspotsSlideProps> = ({
   const sortedSubregions = Object.entries(subregionCounts).sort((a, b) => b[1] - a[1]);
 
   return (
-    <div className="h-full w-full flex flex-col justify-between p-3 sm:p-5 overflow-hidden">
+    <div className="min-h-full w-full flex flex-col justify-between p-3 sm:p-5 overflow-y-auto">
       {/* Top Banner */}
       <div className="shrink-0 mb-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-300 dark:border-blue-900">
@@ -68,7 +68,7 @@ export const FireHotspotsSlide: React.FC<FireHotspotsSlideProps> = ({
             <span className="font-extrabold text-[#15347a] dark:text-blue-300">Fonte Oficial:</span>
             <span className="text-slate-900 dark:text-slate-100">INPE BDQueimadas</span>
             <span className="text-slate-400">·</span>
-            <span className="font-mono font-bold text-slate-800 dark:text-slate-300">24/10/2026 14:30</span>
+            <span className="font-mono font-bold text-slate-800 dark:text-slate-300">04/11/2026 14:30</span>
           </div>
         </div>
       </div>
@@ -250,7 +250,7 @@ export const FireHotspotsSlide: React.FC<FireHotspotsSlideProps> = ({
           </span>
           <span className="text-slate-400">|</span>
           <span>
-            Data: <strong className="text-slate-900 dark:text-slate-100 font-bold">24/10/2026</strong>
+            Data: <strong className="text-slate-900 dark:text-slate-100 font-bold">04/11/2026</strong>
           </span>
         </div>
       </div>

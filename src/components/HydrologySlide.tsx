@@ -20,7 +20,7 @@ export const HydrologySlide: React.FC<HydrologySlideProps> = ({
   onSelectStation,
 }) => {
   return (
-    <div className="h-full w-full flex flex-col justify-between p-3 sm:p-5 overflow-hidden">
+    <div className="min-h-full w-full flex flex-col justify-between p-3 sm:p-5 overflow-y-auto">
       {/* Top Banner: Status da Bacia do Alto Paraguai (BAP) */}
       <div className="shrink-0 mb-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-300 dark:border-blue-900">
@@ -220,7 +220,7 @@ export const HydrologySlide: React.FC<HydrologySlideProps> = ({
           </span>
           <span className="text-slate-400">|</span>
           <span>
-            Data: <strong className="text-slate-900 dark:text-slate-100 font-bold">24/10/2026</strong>
+            Data: <strong className="text-slate-900 dark:text-slate-100 font-bold">04/11/2026</strong>
           </span>
         </div>
       </div>

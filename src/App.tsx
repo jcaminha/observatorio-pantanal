@@ -25,8 +25,8 @@ import {
 } from 'lucide-react';
 import { HISTORIC_COMPARISON_DATA } from './data/pantanalData.ts';
 
-// 20 segundos para cada dado conforme solicitado
-const CAROUSEL_DURATION_SECONDS = 20;
+// 60 segundos (1 minuto) para cada dado conforme solicitado
+const CAROUSEL_DURATION_SECONDS = 60;
 
 export default function App() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
@@ -47,7 +47,7 @@ export default function App() {
       title: 'Sala de Situação & Perímetro',
       badge: 'Mapa do Bioma',
       source: 'IBGE · INPE · ANA · INMET',
-      date: '24/10/2026 14:30',
+      date: '04/11/2026 14:30',
       icon: <Layers className="w-3.5 h-3.5" />,
     },
     {
@@ -63,7 +63,7 @@ export default function App() {
       title: 'Focos de Calor & FRP',
       badge: 'Queimadas 24h',
       source: 'INPE - BDQueimadas',
-      date: '24/10/2026 14:30',
+      date: '04/11/2026 14:30',
       icon: <Flame className="w-3.5 h-3.5" />,
     },
     {
@@ -196,7 +196,7 @@ export default function App() {
 
   return (
     <div
-      className={`h-screen max-h-screen w-screen overflow-hidden flex flex-col font-sans transition-colors duration-300 ${
+      className={`min-h-screen w-screen overflow-x-hidden overflow-y-auto flex flex-col font-sans transition-colors duration-300 ${
         isDarkMode ? 'dark bg-[#090e1c] text-slate-100' : 'bg-[#f4f7fb] text-slate-900'
       }`}
     >
@@ -207,7 +207,7 @@ export default function App() {
         onExportData={handleExportCSV}
       />
 
-      {/* 2. Carousel Control Bar (20s countdown ticker, controls, and datum badges) */}
+      {/* 2. Carousel Control Bar (60s countdown ticker, controls, and datum badges) */}
       <CarouselBar
         slides={slides}
         currentIndex={currentSlideIndex}
@@ -221,8 +221,8 @@ export default function App() {
         isDarkMode={isDarkMode}
       />
 
-      {/* 3. Main Stage: 100% Viewport-Fitted Scroll-Free Datum View */}
-      <main className="flex-1 min-h-0 w-full overflow-hidden relative">
+      {/* 3. Main Stage: Vertically scrollable view with full responsive adaptation */}
+      <main className="flex-1 w-full min-h-[calc(100vh-125px)] flex flex-col relative overflow-x-hidden overflow-y-auto">
         {activeSlideId === 'situacao' && (
           <SituationMapTab
             isDarkMode={isDarkMode}

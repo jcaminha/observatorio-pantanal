@@ -123,7 +123,21 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
     layersGroupRef.current = layerGroup;
     mapInstanceRef.current = map;
 
+    // Ensure Leaflet recalculates dimensions immediately and after rendering
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 300);
+
+    const handleResize = () => {
+      map.invalidateSize();
+    };
+    window.addEventListener('resize', handleResize);
+
     return () => {
+      window.removeEventListener('resize', handleResize);
       map.remove();
       mapInstanceRef.current = null;
     };
@@ -486,7 +500,7 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
   ]);
 
   return (
-    <div className="flex flex-col h-full w-full relative overflow-hidden">
+    <div className="flex flex-col min-h-[calc(100vh-125px)] h-full w-full relative overflow-hidden">
       {/* Top Situational Command Bar with Sources and Dates */}
       <div
         className={`px-4 py-2 border-b-2 flex flex-wrap items-center justify-between gap-3 text-xs z-10 transition-colors ${
@@ -495,18 +509,18 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
       >
         <div className="flex items-center gap-4 flex-wrap">
           {/* Active fires KPI */}
-          <div className="flex items-center gap-2" title="Fonte: INPE BDQueimadas · Coleta: 24/10/2026 16:15">
+          <div className="flex items-center gap-2" title="Fonte: INPE BDQueimadas · Coleta: 04/11/2026 16:15">
             <span className="flex h-2.5 w-2.5 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
             </span>
             <span className="text-slate-800 dark:text-slate-200 font-bold">Focos Ativos:</span>
             <span className="font-black text-red-600 text-sm">{fireSummary.totalSpots}</span>
-            <span className="text-slate-700 dark:text-slate-300 font-semibold text-[11px]">INPE · 24/10/2026</span>
+            <span className="text-slate-700 dark:text-slate-300 font-semibold text-[11px]">INPE · 04/11/2026</span>
           </div>
 
           {/* Reference Ladário River Level */}
-          <div className="flex items-center gap-2 border-l-2 border-slate-300 dark:border-slate-800 pl-4" title="Fonte: ANA / SGB-CPRM · Leitura: 24/10/2026 07:00">
+          <div className="flex items-center gap-2 border-l-2 border-slate-300 dark:border-slate-800 pl-4" title="Fonte: ANA / SGB-CPRM · Leitura: 04/11/2026 07:00">
             <Droplet className="w-3.5 h-3.5 text-[#15347a]" />
             <span className="text-slate-800 dark:text-slate-200 font-bold">Régua Ladário:</span>
             <span className="font-black font-mono text-red-600 dark:text-red-400 text-sm">-18 cm</span>
@@ -515,11 +529,11 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
           </div>
 
           {/* Thermal anomaly */}
-          <div className="hidden lg:flex items-center gap-2 border-l-2 border-slate-300 dark:border-slate-800 pl-4" title="Fonte: INMET Estações Automáticas · 24/10/2026 16:00">
+          <div className="hidden lg:flex items-center gap-2 border-l-2 border-slate-300 dark:border-slate-800 pl-4" title="Fonte: INMET Estações Automáticas · 04/11/2026 16:00">
             <Wind className="w-3.5 h-3.5 text-amber-600" />
             <span className="text-slate-800 dark:text-slate-200 font-bold">Anomalia Térmica:</span>
             <span className="font-black text-amber-700 dark:text-amber-400">+3,1°C</span>
-            <span className="text-slate-700 dark:text-slate-300 font-semibold text-[11px]">INMET · 24/10</span>
+            <span className="text-slate-700 dark:text-slate-300 font-semibold text-[11px]">INMET · 04/11</span>
           </div>
         </div>
 
@@ -567,9 +581,9 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
       </div>
 
       {/* Main Map Area with Floating Filters & Layer Controls */}
-      <div className="relative flex-1 w-full h-full overflow-hidden">
+      <div className="relative flex-1 w-full min-h-[500px] h-[calc(100vh-185px)] overflow-hidden">
         {/* Leaflet container */}
-        <div ref={mapContainerRef} className="w-full h-full z-0" />
+        <div ref={mapContainerRef} className="w-full h-full min-h-[500px] z-0" />
 
         {/* Left Floating Stack: Filters & Official Legend */}
         <div className="absolute top-4 left-4 z-10 w-72 max-w-[calc(100vw-32px)] max-h-[calc(100vh-140px)] flex flex-col gap-2.5 overflow-y-auto pr-0.5">
@@ -721,7 +735,7 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
                 <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">IBGE</span>
               </div>
 
-              <div className="flex items-center justify-between gap-1.5" title="Fonte: INPE BDQueimadas (24/10/2026)">
+              <div className="flex items-center justify-between gap-1.5" title="Fonte: INPE BDQueimadas (04/11/2026)">
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-full bg-red-600 inline-block animate-pulse shrink-0"></span>
                   <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">Queimada Crítica</span>
@@ -729,7 +743,7 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
                 <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">INPE</span>
               </div>
 
-              <div className="flex items-center justify-between gap-1.5" title="Fonte: Agência Nacional de Águas - ANA (24/10/2026)">
+              <div className="flex items-center justify-between gap-1.5" title="Fonte: Agência Nacional de Águas - ANA (04/11/2026)">
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded bg-[#15347a] inline-block shrink-0"></span>
                   <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">Régua Fluviométrica</span>
@@ -819,7 +833,7 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
                 />
               </label>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 pl-5">
-                Fonte: <span className="font-medium text-slate-700 dark:text-slate-300">INPE BDQueimadas</span> · 24/10/2026
+                Fonte: <span className="font-medium text-slate-700 dark:text-slate-300">INPE BDQueimadas</span> · 04/11/2026
               </div>
             </div>
 
@@ -861,7 +875,7 @@ export const SituationMapTab: React.FC<SituationMapTabProps> = ({
                 />
               </label>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 pl-5">
-                Fonte: <span className="font-medium text-slate-700 dark:text-slate-300">INMET Automáticas</span> · 24/10 16:00
+                Fonte: <span className="font-medium text-slate-700 dark:text-slate-300">INMET Automáticas</span> · 04/11 16:00
               </div>
             </div>
 
