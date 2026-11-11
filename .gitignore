@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Backend (Python)
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/

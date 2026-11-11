@@ -1,0 +1,17 @@
+# Configuração não sensível. Segredos (OBS_DATABASE_URL, OBS_FIRMS_MAP_KEY, OBS_ALERTA_WEBHOOK_URL,
+# OBS_SMTP_SENHA e a chave do Earth Engine) ficam no Secret "observatorio-segredos", criado fora do Git:
+#
+#   kubectl create secret generic observatorio-segredos \
+#     --from-literal=OBS_DATABASE_URL='postgresql+psycopg://usuario:senha@host:5432/observatorio' \
+#     --from-literal=OBS_FIRMS_MAP_KEY='...' \
+#     --from-literal=OBS_ALERTA_WEBHOOK_URL='https://...' \
+#     --from-file=gee.json=/caminho/da/chave-da-conta-de-servico.json
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: observatorio-config
+data:
+  OBS_PID_BASE: https://observatorio.inpp.gov.br/id
+  OBS_API_URL_PUBLICA: https://observatorio.inpp.gov.br
+  OBS_GEE_CHAVE_JSON: /segredos/gee.json
+  OBS_CORS_ORIGENS: '["https://observatorio.inpp.gov.br"]'

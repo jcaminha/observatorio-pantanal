@@ -1,0 +1,49 @@
+# Ambiente local do backend: PostGIS + migração + API + agendador.
+#   docker compose up -d --build
+#   docker compose run --rm api observatorio etl rodar territorios inpe_focos
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: observatorio
+      POSTGRES_PASSWORD: observatorio
+      POSTGRES_DB: observatorio
+    ports:
+      - "${OBS_DB_PORTA:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U observatorio -d observatorio"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  migrar:
+    build: ./backend
+    command: observatorio migrar
+    env_file: [{ path: .env, required: false }]
+    environment: &ambiente
+      OBS_DATABASE_URL: postgresql+psycopg://observatorio:observatorio@db:5432/observatorio
+    depends_on:
+      db: { condition: service_healthy }
+
+  api:
+    build: ./backend
+    env_file: [{ path: .env, required: false }]
+    environment: *ambiente
+    ports:
+      - "${OBS_API_PORTA:-8001}:8000"
+    depends_on:
+      migrar: { condition: service_completed_successfully }
+
+  agendador:
+    build: ./backend
+    command: observatorio agendador
+    env_file: [{ path: .env, required: false }]
+    environment: *ambiente
+    restart: unless-stopped
+    depends_on:
+      migrar: { condition: service_completed_successfully }
+
+volumes:
+  pgdata:

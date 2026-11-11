@@ -1,0 +1,12 @@
+# kubectl apply -k deploy/k8s   (ajuste newName/newTag para o registro de imagens do INPP)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - config.yaml
+  - migrar-job.yaml
+  - api.yaml
+  - agendador.yaml
+images:
+  - name: observatorio-backend
+    newName: registry.inpp.gov.br/observatorio/backend
+    newTag: latest

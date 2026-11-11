@@ -1,0 +1,18 @@
+# Aplica as migrações do banco. Rode a cada implantação, antes de atualizar API e agendador.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: observatorio-migrar
+spec:
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrar
+          image: observatorio-backend
+          args: ["observatorio", "migrar"]
+          envFrom:
+            - configMapRef: { name: observatorio-config }
+            - secretRef: { name: observatorio-segredos }

@@ -1,0 +1,32 @@
+# Uma única réplica: o agendador mantém a agenda em memória e duas réplicas duplicariam as cargas.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: observatorio-agendador
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector:
+    matchLabels: { app: observatorio-agendador }
+  template:
+    metadata:
+      labels: { app: observatorio-agendador }
+    spec:
+      containers:
+        - name: agendador
+          image: observatorio-backend
+          args: ["observatorio", "agendador"]
+          envFrom:
+            - configMapRef: { name: observatorio-config }
+            - secretRef: { name: observatorio-segredos }
+          volumeMounts:
+            - { name: segredos, mountPath: /segredos, readOnly: true }
+          resources:
+            requests: { cpu: 100m, memory: 512Mi }
+            limits: { memory: 2Gi }
+      volumes:
+        - name: segredos
+          secret:
+            secretName: observatorio-segredos
+            items: [{ key: gee.json, path: gee.json }]
+            optional: true
